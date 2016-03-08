@@ -254,6 +254,18 @@ qplot(z, sinz,
       main = 'Main title')
 
 # ========================================
+# When you use add-on packages it
+# is always a good idea to make sure you
+# list which version of R you are using
+# and which version of each package you are
+# using. The sessionInfo() command shown below
+# will give you this info. It is also a good
+# idea to use the current citation as follows:
+
+citation(package = "base") # to cite current R
+citation(package = "ggplot2") # to cite current package
+
+# ========================================
 # It is a good idea when collaborating
 # and sharing your code with others to take
 # a snapshot of your computer system and your
@@ -261,7 +273,6 @@ qplot(z, sinz,
 # you can do this using the sessionInfo()
 # function. Here is mine.
 # ========================================
-
 sessionInfo()
 
 
