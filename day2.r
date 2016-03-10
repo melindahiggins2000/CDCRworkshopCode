@@ -1,4 +1,5 @@
 
+# session 1 =========================
 # summary stats
 
 help(package = "datasets")
@@ -54,6 +55,18 @@ sapply(mtcars[myvars], mystats)
 out <- sapply(mtcars[myvars], mystats)
 kable(out)
 
+# select only rows of cars that have 6 cylinders
+d1 <- mtcars[mtcars$cyl==6,myvars]
+sapply(d1, mystats)
+
+# select cars that have 4 cylinders (cyl==4) and 
+# are automatic transmission (am==0)
+d2 <- mtcars[(mtcars$cyl==4 & mtcars$am==0),myvars]
+sapply(d2, mystats)
+
+# can also use the subset() function
+d3 <- subset(mtcars, cyl==4 & am==0, select=myvars)
+d3
 
 # Hmisc package
 library(Hmisc)
@@ -71,6 +84,8 @@ describe(mtcars[myvars])
 # avoid masking problems using 2 colons ::
 Hmisc::describe(mtcars[myvars])
 psych::describe(mtcars[myvars])
+
+# session 2 =========================
 
 # descriptions by group - use the by() function
 dstats <- function(x)sapply(x,mystats)
@@ -207,6 +222,7 @@ boxplot(len ~ dose, data = ToothGrowth, add = TRUE,
 legend(2, 9, c("Ascorbic acid", "Orange juice"),
        fill = c("yellow", "orange"))
 
+# session 3 =========================
 
 # linear models
 head(state.x77)
@@ -226,6 +242,25 @@ anova(fit1, fit2)
 
 fit3 <- lm(Murder ~ LifeExp, data=states)
 summary(fit3)
+
+# try variable selection methods with stepAIC in MASS package
+fit1 <- lm(Murder ~ ., data=states)
+summary(fit1)
+stepAIC(fit1, direction="backward")
+stepAIC(fit1, direction="both")
+
+# library leaps - all subsets regression
+library(leaps)
+
+leaps <- regsubsets(Murder ~ ., data=states, nbest=4)
+plot(leaps, scale="adjr2")
+library(car)
+subsets(leaps, statistic="cp",
+        main="Cp Plot for All subsets regression")
+abline(1,1,lty=2,col="red")
+
+
+
 
 # looking at interaction effects
 
