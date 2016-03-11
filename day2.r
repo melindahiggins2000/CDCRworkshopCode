@@ -1,4 +1,222 @@
 
+
+# ======================================
+# more on data management
+# creating new variables
+# recoding and missing data
+# ======================================
+
+# ======================================
+# let's create Gender as a Factor
+# instead of as just number codes
+# Factors are useful in plots
+# and tables providing labels for the
+# labels. Factors are also helpful
+# in various models.
+# ======================================
+
+data.csv <- read.csv(file="Dataset_01_comma.csv")
+data.csv
+
+data.csv[18,"Height"] <- 5.6
+data.csv$bmiPRE <- (data.csv$WeightPRE*703)/((data.csv$Height*12)**2)
+data.csv$bmiPOST <- (data.csv$WeightPOST*703)/((data.csv$Height*12)**2)
+
+data.csv$GenderFactor <- factor(data.csv$GenderCoded,
+                                levels = c(1,2),
+                                labels = c("Male","Female"))
+
+data.csv$GenderFactor
+str(data.csv$GenderFactor)
+class(data.csv$GenderFactor)
+
+table(data.csv$GenderFactor)
+
+barplot(table(data.csv$GenderFactor))
+
+# try some more recoding
+# create new variable with BMI categories
+# we'll use within() function to make the 
+# coding easier
+# the code below creates 2 new variables
+# with character labels for each category
+
+data.csv <- within(data.csv,{
+  bmiPREcat <- NA
+  bmiPREcat[bmiPRE < 18.5] <- "underweight"
+  bmiPREcat[bmiPRE >= 18.5 & bmiPRE < 25] <- "normal"
+  bmiPREcat[bmiPRE >= 25 & bmiPRE < 30] <- "overweight"
+  bmiPREcat[bmiPRE >= 30] <- "obese"
+})
+
+table(data.csv$bmiPREcat)
+
+# now do it again for the POST BMI
+
+data.csv <- within(data.csv,{
+  bmiPOSTcat <- NA
+  bmiPOSTcat[bmiPOST < 18.5] <- "underweight"
+  bmiPOSTcat[bmiPOST >= 18.5 & bmiPOST < 25] <- "normal"
+  bmiPOSTcat[bmiPOST >= 25 & bmiPOST < 30] <- "overweight"
+  bmiPOSTcat[bmiPOST >= 30] <- "obese"
+})
+
+table(data.csv$bmiPOSTcat)
+
+str(data.csv$bmiPREcat)
+str(data.csv$bmiPOSTcat)
+
+# notice that the table lists
+# the categories in alphabetical order
+# which is not what we want
+# we would like overweight listed
+# before obese.
+# so let's assign an order to our levels
+# we will create an ordered factor
+
+data.csv$bmiPREcat.or <- factor(data.csv$bmiPREcat,
+                                order = TRUE,
+                                levels = c("underweight", 
+                                           "normal",
+                                           "overweight",
+                                           "obese"))
+
+data.csv$bmiPOSTcat.or <- factor(data.csv$bmiPOSTcat,
+                                order = TRUE,
+                                levels = c("underweight", 
+                                           "normal",
+                                           "overweight",
+                                           "obese"))
+
+str(data.csv$bmiPREcat.or)
+str(data.csv$bmiPOSTcat.or)
+
+table(data.csv$bmiPREcat.or)
+table(data.csv$bmiPOSTcat.or)
+
+# using these categories
+# create a barplot from the table frequencies
+
+barplot(table(data.csv$bmiPREcat.or))
+
+# alternative using with with() function
+
+with(data.csv, 
+     barplot(table(bmiPREcat.or)))
+
+# suppose we wanted to set all subjects
+# under the age of 35 to missing
+
+data.csv$Age35plus <- data.csv$Age
+data.csv[data.csv$Age35plus < 35, "Age35plus"] <- NA
+
+summary(data.csv[,c("Age", "Age35plus")])
+
+# find mean Age with and without missing data
+
+mean(data.csv$Age)
+mean(data.csv$Age35plus)
+mean(data.csv$Age35plus, na.rm=TRUE)
+
+# code above run using with() function
+
+with(data.csv, mean(Age))
+with(data.csv, mean(Age35plus))
+with(data.csv, mean(Age35plus, na.rm=TRUE))
+
+# find out how much missing data there is
+
+is.na(data.csv$Age35plus)
+sum(is.na(data.csv$Age35plus))
+
+with(data.csv, 
+     sum(is.na(Age35plus)))
+
+# how much in the whole dataset
+
+sum(is.na(data.csv))
+
+# keep only data for complete cases
+# subject 9 missing gender
+# subjects 5 and 15 missing Age35plus
+
+dataall <- na.omit(data.csv) # data without subjects 5, 9 and 15
+
+# find which cases have missing data
+# create an index to find the cases with
+# no missing data using complete.cases() function
+
+i <- complete.cases(data.csv)
+
+# use this index to retrieve the list of subjects with
+# complete data
+
+data.csv$SubjectID[i]
+
+# since i is a logical vector, we can use the 
+# not operator ! to find all the cases where
+# i is not TRUE or is FALSE
+
+data.csv$SubjectID[!i]
+
+# we can use the logic vector i to keep
+# all of the cases with complete data where i is TRUE
+
+dataall2 <- data.csv[i,]
+
+# make a plot using ggplot2 
+# for bmiPRE vs bmiPOST
+
+p <- ggplot(data.csv, aes(bmiPRE, bmiPOST)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", colour = "red", se = FALSE) + 
+  geom_smooth(method = "lm", colour = "blue") +
+  ggtitle("BMI PRE v POST: RED smoothed line, BLUE linear fit line")
+p
+
+# ======================================
+# we'll use the GenderFactor to split
+# the plots into different panels by gender
+# ======================================
+p <- ggplot(data.csv, aes(bmiPRE, bmiPOST)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", colour = "red", se = FALSE) + 
+  geom_smooth(method = "lm", colour = "blue") + 
+  facet_wrap(~GenderFactor) + 
+  ggtitle("Panels for Gender, RED smoothed line, BLUE linear fit line")
+
+p
+
+# ======================================
+# we can also use this factor to color
+# code the points and associated model fits
+# ======================================
+p <- ggplot(data.csv, aes(bmiPRE, bmiPOST)) + 
+  geom_point(aes(colour = GenderFactor)) + 
+  geom_smooth(method = "lm", aes(colour = GenderFactor)) + 
+  ggtitle("Colored by Gender")
+
+p
+
+# ======================================
+# let's take a quick look at the linear
+# model object that has the output
+# from fitting a linear model to the
+# PRE and POST BMI data.
+# ======================================
+fit1 <- lm(bmiPOST ~ bmiPRE, data=data.csv)
+fit1
+summary(fit1)
+coef(fit1)
+anova(fit1)
+
+library(knitr)
+kable(as.data.frame(summary(fit1)$coefficients))
+
+# =================================
+
+
+
 # session 1 =========================
 # summary stats
 

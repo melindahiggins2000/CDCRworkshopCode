@@ -1,0 +1,134 @@
+---
+title: "My First Report"
+author: "Melinda Higgins"
+date: "March 10, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## My first R Markdown report
+
+---
+
+This is my first Rmarkdown report written as of `r Sys.time()`.
+
+The dataset we will be using is a simple data example. We downloaded this example from Melinda Higgins' github website at [https://github.com/melindahiggins2000/CDCRworkshopCode](https://github.com/melindahiggins2000/CDCRworkshopCode).
+
+```{r echo=FALSE}
+data.csv <- read.csv(file="Dataset_01_comma.csv")
+data.csv[18,"Height"] <- 5.6
+data.csv$bmiPRE <- (data.csv$WeightPRE*703)/((data.csv$Height*12)**2)
+data.csv$bmiPOST <- (data.csv$WeightPOST*703)/((data.csv$Height*12)**2)
+data.csv$GenderFactor <- factor(data.csv$GenderCoded,
+                                levels = c(1,2),
+                                labels = c("Male","Female"))
+data.csv <- within(data.csv,{
+  bmiPREcat <- NA
+  bmiPREcat[bmiPRE < 18.5] <- "underweight"
+  bmiPREcat[bmiPRE >= 18.5 & bmiPRE < 25] <- "normal"
+  bmiPREcat[bmiPRE >= 25 & bmiPRE < 30] <- "overweight"
+  bmiPREcat[bmiPRE >= 30] <- "obese"
+})
+data.csv <- within(data.csv,{
+  bmiPOSTcat <- NA
+  bmiPOSTcat[bmiPOST < 18.5] <- "underweight"
+  bmiPOSTcat[bmiPOST >= 18.5 & bmiPOST < 25] <- "normal"
+  bmiPOSTcat[bmiPOST >= 25 & bmiPOST < 30] <- "overweight"
+  bmiPOSTcat[bmiPOST >= 30] <- "obese"
+})
+data.csv$bmiPREcat.or <- factor(data.csv$bmiPREcat,
+                                order = TRUE,
+                                levels = c("underweight", 
+                                           "normal",
+                                           "overweight",
+                                           "obese"))
+
+data.csv$bmiPOSTcat.or <- factor(data.csv$bmiPOSTcat,
+                                order = TRUE,
+                                levels = c("underweight", 
+                                           "normal",
+                                           "overweight",
+                                           "obese"))
+```
+
+### Data Table
+
+Here is the data:
+
+```{r echo=FALSE}
+myvars <- c("Age", "bmiPRE", "bmiPREcat.or", 
+            "bmiPOST", "bmiPOSTcat.or", 
+            "GenderFactor")
+data <- data.csv[,myvars]
+names(data) <- c("Age",
+                 "BMI PRE", "BMI PRE Category",
+                 "BMI POST", "BMI POST Category",
+                 "Gender")
+kable(data)
+```
+
+### Plots of BMI Categories
+
+Here is a barplot of the BMI categories at PRE
+
+```{r echo=FALSE}
+barplot(table(data.csv$bmiPREcat.or))
+```
+
+Here is a barplot of the BMI categories at PRE
+
+```{r echo=FALSE}
+barplot(table(data.csv$bmiPOSTcat.or))
+```
+
+### Comparisons of BMI PRE v POST
+
+Here is a plot of the BMI PRE v POST. The linear model fit is shown with a **BLUE** line with 95% confidence intervals shown with grey shaded region and a **RED** line for the non-parametric _loess_ smoothed line.
+
+```{r echo=FALSE}
+data <- data.csv
+p <- ggplot(data, aes(bmiPRE, bmiPOST)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", colour = "red", se = FALSE) + 
+  geom_smooth(method = "lm", colour = "blue") + 
+  ggtitle("BMI PRE v POST: RED smoothed line, BLUE linear fit line")
+
+p
+```
+
+### Linear Model Results
+
+The best fit linear model results were:
+
+```{r echo=FALSE}
+fit1 <- lm(bmiPOST ~ bmiPRE, data=data.csv)
+kable(as.data.frame(summary(fit1)$coefficients))
+```
+
+The ANOVA model fit for this model was:
+
+```{r}
+kable(as.data.frame(anova(fit1)))
+```
+
+### Compare by Gender
+
+Here is the BMI PRE v POST paneled by Gender.
+
+```{r echo=FALSE}
+data <- data.csv[!is.na(data.csv$GenderFactor),]
+p <- ggplot(data, aes(bmiPRE, bmiPOST)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", colour = "red", se = FALSE) + 
+  geom_smooth(method = "lm", colour = "blue") + 
+  facet_wrap(~GenderFactor) + 
+  ggtitle("Panels for Gender, RED smoothed line, BLUE linear fit line")
+
+p
+```
+
