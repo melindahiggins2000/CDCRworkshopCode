@@ -1,7 +1,12 @@
 # ========================================
 # Day 1, March 10, 2016
+# code and comments updated
+# as of March 15, 2016
+#
+# by Melinda Higgins, PhD.
+# ========================================
 
-# Session 1 ==============================
+# DAY 1: Session 1 =======================
 
 # ======================================
 # see what directory R is currently set to 
@@ -35,6 +40,13 @@ pi         # pi is a built in Constant
 4 * pi
 
 # ======================================
+# use help() to see what other
+# built in constants there are in R
+# Notice that Constants is spelled
+# with a capital C. R is CaSe sensitive
+# so Constants and constants are 2
+# different things
+# ======================================
 help(Constants)
 LETTERS
 letters
@@ -42,7 +54,7 @@ month.abb
 month.name
 
 # ====================================
-# create x which had 1 numeric value
+# create x to have 1 numeric value
 # ======================================
 x = 3 * 5
 x <- 3 * 5    # notice nothing is shown in the console
@@ -51,7 +63,7 @@ x <- 3 * 5    # notice nothing is shown in the console
 x
 
 # ======================================
-# create y which is a numeric (integer) vector
+# create y as a numeric (integer) vector
 # with 12 elements
 # ======================================
 y <- 1:12
@@ -92,6 +104,10 @@ sinz <- sin(z)
 # ======================================
 # look at objects created get simple listing
 # and get listing with structure information
+# ls() lists the objects in the
+# Global Environment (top right window)
+# ls.str() lists the objects with their
+# structure
 # ======================================
 ls()
 ls.str()
@@ -108,11 +124,6 @@ length(y)
 length(z)
 length(sinz)
 
-# ========================================
-# other functions that are helpful for finding
-# out about data objects is the str() "structure"
-# function and the class() function.
-
 # ====================================
 # NOTE ON ADDING COMMENTS
 # ====================================
@@ -120,14 +131,23 @@ length(sinz)
 # then hit CTRL+SHIFT+C to toggle back and forth
 # between code and comments.
 
-#'this is
-#'a new line of commenting that begins with
-#'a hashtag or number # sign followed by a single quote
-#'then when you hit return the comment delimiter #'
-#'is automatically added until you type in a
-#'single hashtag without the single quote.
-# then remove single quote and begin new line for r code
+#' you can continuously add comments after
+#' the hastag (#) followed by a simgle quote '
+#' and each time you hit return the next line begins
+#' with a comment.
+#
+#' so, this is
+#' a new line of commenting that begins with
+#' a hashtag or number # sign followed by a single quote
+#' then when you hit return the comment delimiter #'
+#' is automatically added until you type in a
+#' single hashtag without the single quote.
+#  then remove single quote and begin new line for r code
 
+# ========================================
+# other functions that are helpful for finding
+# out about data objects is the str() "structure"
+# function and the class() function.
 # ========================================
 str(y)
 class(y)
@@ -135,8 +155,10 @@ str(z)
 class(z)
 
 # ======================================
-# create some vectors with different objects
-# 
+# create some vectors made up
+# of different elements: numbers,
+# characters, and/or logic elements
+# like TRUE or FALSE
 # ======================================
 a1 <- c(1,2,3,4,10,11)
 a1
@@ -152,7 +174,11 @@ a5
 a6 <- c(5,10,x)
 
 # ======================================
-# use the class() function to investigate these further
+# use the class() function to investigate 
+# these vectors further - notice how
+# R tries to combine elements of different
+# types - combining characters, numbers
+# and logic elements
 # ======================================
 class(a1)
 class(a2)
@@ -185,6 +211,8 @@ dim(a1to5rbind)
 # using list() - notice the dim()
 # function doesn't return anything
 # dim() does not work for lists
+# but a list retains all of the original
+# element types
 # ======================================
 a1to5list <- list(a1,a2,a3,a4,a5)
 a1to5list
@@ -194,6 +222,12 @@ dim(a1to5list)
 
 # ======================================
 # create some lists made up of other lists
+# this is how many R functions return
+# their output. For example, the output
+# from the linear regression model, lm()
+# is a list of the various components
+# and output statistics from a linear
+# regression.
 # ======================================
 alist1 <- list(x, z, sinz, a1to5list)
 alist1
@@ -202,7 +236,13 @@ class(alist1)
 
 # ======================================
 # using data.frame() - this is a special
-# kind of list - this time dim() works
+# kind of list - so, this time dim() works
+# data.frames are the MOST COMMON way
+# to handle and manage data. Each column
+# or each variable in a data frame can
+# be different types as long as the elements
+# within each column variable are the same
+# i.e. all numbers or all characters, etc.
 # ======================================
 a1to5df <- data.frame(a1,a2,a3,a4,a5)
 a1to5df
@@ -213,6 +253,9 @@ dim(a1to5df)
 # ======================================
 # this time with stringsAsFactors
 # set to FALSE
+# NOTE: data.frame() by DEFAULT wants to
+# set character variables to "factors"
+# you can set this option to FALSE.
 # ======================================
 a1to5dfnf <- data.frame(a1,a2,a3,a4,a5,
                         stringsAsFactors = FALSE)
@@ -227,21 +270,31 @@ dim(a1to5dfnf)
 # using the # `data.frame()` command. Combine 
 # the object `y` with the built in constant 
 # for `month.name` and `month.abb`.
+# ======================================
 
+# look at the vectors needed
 y
 month.name
 month.abb
 
+# combine these using data.frame()
 mydf <- data.frame(y, month.name, month.abb)
+
+# question was asked why can't we
+# use c() - the c() or combine function
+# simply appends these together into 1 long
+# vector and we want them in sepaarate columns.
+# so, this won't work
 c(y,month.name,month.abb)
 
-# 
+# ======================================
+# exercise 1 - key
+# ======================================
 # Create the data frame again and call it 
 # `df2` using the same 3 objects 
 # (`y`, `month.name` and `month.abb`) and 
 # set `stringsAsFactors` to FALSE.
 # ======================================
-# exercise 1 - key
 
 df1 <- data.frame(y, month.name, month.abb)
 df1
@@ -252,17 +305,20 @@ df2 <- data.frame(y, month.name, month.abb,
 df2
 str(df2)
 
-# Session 2 ==============================
+# DAY 1: Session 2 =====================
 
 # ======================================
 # look at data objects - you can use
-# the fix() command to edit your data
+# the fix() command to VIEW and EDIT your data
+# BUT this is a point-and-click approach
+# so BE CAREFUL using fix() to edit your data
 # ======================================
 fix(z)
 fix(alist1)
 fix(df2)
 
 # ======================================
+# look at only part of your data
 # use head() and tail() to only look
 # at a few rows at a time
 # ======================================
@@ -272,9 +328,11 @@ tail(df1)
 # ======================================
 # you can also invoke the viewer 
 # with View()
+# you CANNOT edit your data using View()
 # ======================================
 View(df1)
-view(df1)
+view(df1) # lower case view() won't work
+          # notice the error that R gives you
 
 # ======================================
 # let's make a simple plot
@@ -283,6 +341,8 @@ plot(z,sinz)
 
 # ======================================
 # add some customization
+# see help(plot) for using these options
+# for xlabel, ylabel, and titles
 # ======================================
 plot(z, sinz, 
      xlab='Z = Sequence 0 to 10 by 0.5', 
@@ -292,6 +352,8 @@ plot(z, sinz,
 
 # ======================================
 # add a BLUE line using lines()
+# see help(par) for details on linetype
+# options
 # ======================================
 lines(z,sinz,col='blue')
 
@@ -300,6 +362,7 @@ lines(z,sinz,col='blue')
 # plotting character pch 23 is a filled diamond
 # col defines the color
 # bg defines the filled or background color
+# see details using help(points)
 # ======================================
 points(z,sinz,pch=23,col='red',bg='black')
 
@@ -313,6 +376,7 @@ points(z,sinz,pch=23,col='red',bg='black')
 
 # ======================================
 # all together in one block
+# easier to select and click run
 # ======================================
 plot(z, sinz,
      xlab = 'Z = Sequence 0 to 10 by 0.5',
@@ -324,6 +388,15 @@ points(z, sinz, pch = 23, col = 'red', bg = 'black')
 # ======================================
 # use graphics device to make a PDF
 # of the plot
+# see help(Devices) for links and help
+# on the various graphical devices
+#
+# ** NOTE ** ALWAYS REMEMBER
+# to turn the device off using dev.off()
+# otherwise R will keep trying to send
+# every plot to the output device
+# in this case you'll keep adding pages
+# to the PDF file.
 # ======================================
 pdf(file = "plot1.pdf")
 
@@ -349,6 +422,7 @@ dev.off()
 # and the quality to 50.
 # ======================================
 # exercise 2 - key
+# ======================================
 
 jpeg(file = "plot1.jpg")
 
@@ -378,16 +452,35 @@ dev.off()
 
 # ======================================
 # let's install a package
+# we'll install the "ggplot2" package
+# INSTALLING a package puts it on to
+# your local hard drive. 
+#
+# You can also install a package
+# from the menu Tools/Install Packages
+# in the RStudio interface
+# 
+# However, before
+# R can use the functions in the package
+# you have to LOAD it into R using the
+# library() command below.
 # ======================================
 install.packages("ggplot2")
 
 # ======================================
-# load the package using library()
+# LOAD the package using library()
+# 
+# You can also click on the "Packages" tab
+# in the lower right window and then scroll
+# to find the package and click the checkbox 
+# to the left of the package name and this will
+# also LOAD the package in the RStudio interface.
 # ======================================
 library(ggplot2)
 
 # ======================================
-# once it is loaded we can get info
+# once the ggplot2 package is loaded 
+# we can get info
 # and help on the package - see
 # more in the "Packages" window
 # ======================================
@@ -396,6 +489,7 @@ help(package = "ggplot2")
 # ======================================
 # now that ggplot2 is loaded we can
 # use the qplot() function
+# ======================================
 qplot(z, sinz,
       geom = c("point", "line"),
       xlab = 'Z = Sequence 0 to 10 by 0.5',
@@ -404,6 +498,7 @@ qplot(z, sinz,
 
 # ======================================
 # we can also call variables inside a data frame
+# put z and sinz into a data.frame called df2
 # ======================================
 df2 <- data.frame(z,sinz)
 
@@ -434,6 +529,8 @@ points(z, sinz, pch = 23, col = 'red', bg = 'black')
 
 # ======================================
 # make the basic plot window
+# the object p now contains the plot
+# and we keep adding layer using +
 # ======================================
 p <- ggplot(df2, aes(x=z, y=sinz))
 p
@@ -486,7 +583,6 @@ p
 p <- p + theme_wsj() + ggtitle("The WSJ Theme")
 p
 
-
 # ======================================
 # it is always a good idea to make sure
 # you cite the packages you used and give
@@ -505,10 +601,11 @@ citation(package = "ggthemes")
 # ======================================
 sessionInfo()
 
-# session 3 ===============================
+# DAY 1: session 3 =====================
 
 # ======================================
 # let's make some more data objects
+# and update a few we already had
 # ======================================
 x <- 3 * 8 + 6
 y <- 1:12
@@ -535,8 +632,11 @@ list1 <- list(x,y,df1a)
 class(list1)
 str(list1)
 
+# ======================================
+# already saw previously
 # you can use the fix() function
 # to edit data and save the changes
+# ======================================
 
 fix(df1a)
 
@@ -593,8 +693,12 @@ ls()
 # ======================================
 # other ways to select a column of data
 # i.e. select a variable in a dataset.
+# use the $ symbol to select a variable or
+# column by its name
 # ======================================
+
 df2[,1] # use the column number
+
 df2$z # select by column name
 
 # ======================================
@@ -605,34 +709,39 @@ df2$z # select by column name
 # ======================================
 df1a$month.name[3]
 
+# ======================================
+# selecting data when some 
+# condition is TRUE
+#
 # find the row for which y equals 5
 # in df1a
-
+# ======================================
 pickrow <- df1a$y == 5
 df1a[pickrow, ]
 
-pickrow <- df1a$y > 6
-df1a[pickrow, ]
-
+# these 2 statements can be nested
 df1a[df1a$y == 5, ]
 
+# find rows where y > 6
+pickrow <- df1a$y > 6
+df1a[pickrow, ]
 
 # ======================================
 # use save.image() or save() to save all 
 # or selected objects - these are saved
 # as *.RData files
 # ======================================
-save.image("allobjects.RData")
-save(df2, file="df2.RData")
+save.image("allobjects.RData")  # save ALL objects in workspace
+save(df2, file="df2.RData")     # save ONLY the df2 object
 
 # ======================================
 # remove all of the objects
 # and then load them back - either one
 # at a time or all of them together
 # ======================================
-rm(list = ls())
-load(file="df2.RData")
-load("allobjects.RData")
+rm(list = ls())                 # remove ALL objects in workspace
+load(file="df2.RData")          # load ONLY the df2 object
+load("allobjects.RData")        # load all objects saved in "allobjects.RData"
 ls()
 
 # ======================================
@@ -641,16 +750,19 @@ ls()
 # download these files and put them
 # into your working directory
 # for this next exercise
+#
+# these are also available at the GITHUB repository
+# https://github.com/melindahiggins2000/CDCRworkshopCode 
 # ======================================
 
 # ======================================
-# read in as comma delimited
+# read in data as comma delimited
 # ======================================
 data.rt <- read.table(file="Dataset_01_comma.csv",header=TRUE,sep=",")
 data.rt
 
 # ======================================
-# read in a CSV
+# read in a CSV formatted file
 # ======================================
 data.csv <- read.csv(file="Dataset_01_comma.csv")
 data.csv
@@ -672,6 +784,7 @@ data.xls
 
 # ======================================
 # read in a XLSX Excel file
+# use default to read in sheet 1
 # ======================================
 data.xlsx <- read_excel("Dataset_01.xlsx", sheet=1)
 data.xlsx
@@ -681,11 +794,9 @@ data.xlsx
 datanew.xlsx <- read_excel("Dataset_01addsheet.xlsx", sheet="new")
 datanew.xlsx
 
-data.xlsx <- read_excel("Dataset_01.xlsx", sheet=1)
-data.xlsx
-
 # ======================================
 # read in a SPSS SAV file
+# ======================================
 
 library(foreign)
 
@@ -706,18 +817,9 @@ install.packages("haven")
 library(haven)
 test1.sas <- read_sas("http://crn.cancer.gov/resources/ctcodes-procedures.sas7bdat")
 test2.sas <- read_sas("ctcodes-procedures.sas7bdat")
+test3.sas <- read_sas("data11.sas7bdat")
 
-# ======================================
-# IGNORE THIS - USE HAVEN EXAMPLE
-# ABOVE WITH read_sas() FUNCTION
-# Using the sas7bdat packafe
-# try reading the SAS file directly
-# this is experimental and didn't work
-# ======================================
-#data.sas <- read.sas7bdat(file = "Dataset_01.sas7bdat")
-#data.sas
-
-# session 4 ==========================
+# DAY 1: session 4 =====================
 
 # ======================================
 # create new variables BMI from 
@@ -737,13 +839,25 @@ diff <- bmiPOST - bmiPRE # creates diff variables
                          # stands alone not attached
 mean(diff)
 
+# ======================================
 # create using the variables inside the dataset
 # but attach them back to the dataset
+# 
+# ALWAYS remember to detach your dataset
+# ======================================
 data.csv$diff2 <- bmiPOST - bmiPRE
 
 detach(data.csv)
 
-# ADD ENTIRE DATA UPDATE with attach **
+# ======================================
+# see more excellent examples of why to NOT use attach
+# and how to approach data changes using with()
+# or within() or transform() or mutate()
+#
+# see http://www.r-bloggers.com/friday-function-triple-bill-with-vs-within-vs-transform/
+# and 
+# see http://www.r-bloggers.com/comparing-transformation-styles-attach-transform-mutate-and-within/
+# ======================================
 
 # ======================================
 # once the dataset is detached
@@ -757,18 +871,11 @@ data.csv$diff <- diff
 
 rm(diff)
 
-attach(data.csv)
-
-bmiPRE
-
-detach(data.csv)
-
 # ======================================
 # WRITING or SAVING data
 # you can save the file out to *.RData
 # ======================================
 save(data.csv, file="datacsv.RData")
-
 
 # ======================================
 # you can write datasets out as CSV
@@ -785,6 +892,34 @@ write.table(data.csv,
           sep="\t")
 
 # ======================================
+# here is an example of writing the dataset
+# back out as a SPSS file - write.foreign()
+# creates a basic text datafile and SPSS
+# SYNTAX code to read in this data text file
+# ======================================
+# NOTE: When writing to SPSS variables
+# that are factors will have "codes" created for them
+# ======================================
+datafile<-tempfile()
+codefile<-tempfile()
+write.foreign(data.csv,datafile="dataspss.txt",
+              codefile="codespss.sps",package="SPSS")
+unlink(datafile)
+unlink(codefile)
+
+# ======================================
+# Here is an example for writing out
+# to a SAS file
+# ======================================
+datafile<-tempfile()
+codefile<-tempfile()
+write.foreign(data.csv,datafile="datasas.txt",
+              codefile="codesas.sas",package="SAS")
+unlink(datafile)
+unlink(codefile)
+
+# ======================================
+# quick check
 # we'll recreate the BMI variables
 # and make a histogram
 # ======================================
@@ -800,6 +935,12 @@ hist(data.csv$bmiPRE)
 # recalculate and redo the histogram
 # this time will use probabilities
 # instead of frequencies for the histogram
+#
+# notice here I still use the $ selector
+# on the left side of the assignment
+# commands below. you MUST use the $ sign
+# here or the changes to the dataset will NOT
+# be saved.
 # ======================================
 attach(data.csv)
 
@@ -812,9 +953,11 @@ detach(data.csv)
 hist(data.csv$bmiPRE, freq=FALSE)
 lines(density(data.csv$bmiPRE))
 
+# ======================================
 # However, I advise again using attach()
 # and detach(), see more at 
 # http://www.r-bloggers.com/to-attach-or-not-attach-that-is-the-question/
+# ======================================
 
 # ======================================
 # make a plot of the PRE vs POST BMI
@@ -824,7 +967,6 @@ lines(density(data.csv$bmiPRE))
 plot(data.csv$bmiPRE, data.csv$bmiPOST, "p")
 abline(lm(data.csv$bmiPOST ~ data.csv$bmiPRE), col="red")
 lines(lowess(data.csv$bmiPRE, data.csv$bmiPOST), col="blue")
-
 
 # ======================================
 # do the plot again using ggplot options
@@ -883,6 +1025,8 @@ p
 # model object that has the output
 # from fitting a linear model to the
 # PRE and POST BMI data.
+# we'll cover the lm() object more
+# in DAY 2.
 # ======================================
 fit1 <- lm(bmiPOST ~ bmiPRE, data=data.csv)
 fit1

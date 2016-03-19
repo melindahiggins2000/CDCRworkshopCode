@@ -1,7 +1,7 @@
 ---
-title: "My First Report"
+title: "My Analysis of the BMI dataset"
 author: "Melinda Higgins"
-date: "March 10, 2016"
+date: "March 11, 2016"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ library(ggplot2)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## My first R Markdown report
+## My Report on the BMI toy dataset
 
 ---
 
@@ -69,7 +69,7 @@ names(data) <- c("Age",
                  "BMI PRE", "BMI PRE Category",
                  "BMI POST", "BMI POST Category",
                  "Gender")
-kable(data)
+kable(data, digits = 2)
 ```
 
 ### Plots of BMI Categories
@@ -112,7 +112,7 @@ kable(as.data.frame(summary(fit1)$coefficients))
 
 The ANOVA model fit for this model was:
 
-```{r}
+```{r echo=FALSE}
 kable(as.data.frame(anova(fit1)))
 ```
 
